@@ -1,0 +1,224 @@
+/* Dark theme, sharp edges, frosted-glass panels. */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html,
+body { background: #000; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: #f2f3f5;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: 0.01em;
+}
+
+/* faint glow behind everything so the glass blur has something to pick up */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(55% 45% at 50% -5%, rgba(130, 150, 210, 0.07), transparent 70%),
+    radial-gradient(40% 40% at 105% 105%, rgba(120, 140, 200, 0.05), transparent 70%);
+}
+
+::selection { background: rgba(255, 255, 255, 0.22); }
+
+.wrap {
+  max-width: 600px;
+  margin: 13vh auto 6vh;
+  padding: 0 22px;
+}
+
+h1 {
+  margin: 0 0 1.8rem;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* search bar: input and button sit flush as one bar */
+.search { position: relative; }
+
+.box { display: flex; }
+
+#q {
+  flex: 1;
+  min-width: 0;
+  padding: 15px 16px;
+  font-size: 1rem;
+  color: #f4f5f7;
+  caret-color: #fff;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-right: none;
+  border-radius: 0;
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+#q::placeholder { color: rgba(255, 255, 255, 0.3); }
+#q:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.42);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14), 0 0 28px rgba(140, 165, 255, 0.12);
+}
+
+#go {
+  padding: 0 22px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #f4f5f7;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0;
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+#go:hover { background: rgba(255, 255, 255, 0.13); border-color: rgba(255, 255, 255, 0.32); }
+#go:active { background: rgba(255, 255, 255, 0.18); }
+
+/* suggestions dropdown: darker than the bar so it stays readable over content */
+.suggestions {
+  list-style: none;
+  margin: 9px 0 0;
+  padding: 4px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  background: rgba(8, 9, 12, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0;
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+.suggestions li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 11px 14px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border-left: 2px solid transparent;
+  transition: background 0.1s ease, border-color 0.1s ease;
+}
+.suggestions li.active,
+.suggestions li:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-left-color: rgba(255, 255, 255, 0.7);
+}
+.suggestions .q {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.55);
+}
+.suggestions .q strong { font-weight: 600; color: #fff; } /* matched prefix */
+.suggestions li.active .q,
+.suggestions li:hover .q { color: rgba(255, 255, 255, 0.85); }
+.suggestions .score {
+  flex-shrink: 0;
+  font: 11px ui-monospace, "SF Mono", Menlo, monospace;
+  color: rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.02em;
+}
+
+/* controls row: mode toggle on the left, status text on the right */
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 11px;
+}
+.status {
+  font: 12px ui-monospace, "SF Mono", "Cascadia Code", Menlo, monospace;
+  color: rgba(255, 255, 255, 0.4);
+}
+.segmented { display: inline-flex; border: 1px solid rgba(255, 255, 255, 0.12); }
+.seg {
+  padding: 6px 14px;
+  font: 11px/1 ui-monospace, "SF Mono", Menlo, monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+.seg + .seg { border-left: 1px solid rgba(255, 255, 255, 0.12); }
+.seg:hover { color: rgba(255, 255, 255, 0.82); }
+.seg.active { background: rgba(255, 255, 255, 0.9); color: #000; }
+.hint {
+  margin-top: 10px;
+  font: 11px ui-monospace, "SF Mono", Menlo, monospace;
+  letter-spacing: 0.03em;
+  color: rgba(255, 255, 255, 0.26);
+}
+
+/* search-response message banner */
+.message {
+  margin-top: 20px;
+  padding: 13px 16px;
+  font: 13px ui-monospace, "SF Mono", "Cascadia Code", Menlo, monospace;
+  color: rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-left: 2px solid rgba(255, 255, 255, 0.7);
+  border-radius: 0;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* trending panel */
+.trending {
+  margin-top: 34px;
+  padding: 16px 20px 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 0;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.trending h2 {
+  margin: 0 0 0.7rem;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.42);
+}
+.trending ol {
+  margin: 0;
+  padding-left: 1.5rem;
+  counter-reset: t;
+}
+.trending li {
+  padding: 5px 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.92rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Search Typeahead</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <main class="wrap">
+    <h1>Search Typeahead</h1>
+
+    <div class="search">
+      <div class="box">
+        <input id="q" type="text" autocomplete="off" placeholder="Start typing…"
+               aria-label="Search" aria-autocomplete="list" aria-controls="suggestions" />
+        <button id="go" type="button">Search</button>
+      </div>
+      <ul id="suggestions" class="suggestions" role="listbox" hidden></ul>
+      <div class="meta">
+        <div class="segmented" role="tablist" aria-label="ranking mode">
+          <button class="seg active" data-mode="count" type="button">Count</button>
+          <button class="seg" data-mode="recency" type="button">Recency</button>
+        </div>
+        <span id="status" class="status" aria-live="polite"></span>
+      </div>
+      <div class="hint">↑ ↓ navigate · enter select · esc close</div>
+    </div>
+
+    <div id="message" class="message" hidden></div>
+
+    <section class="trending" id="trending-section" hidden>
+      <h2>Trending</h2>
+      <ol id="trending"></ol>
+    </section>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>

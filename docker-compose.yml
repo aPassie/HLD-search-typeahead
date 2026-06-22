@@ -1,0 +1,21 @@
+# Redis-backed cache mode: three independent Redis nodes for the
+# consistent-hash ring. The ring and routing code is unchanged; only the cache
+# node backend differs (in-process map vs. Redis server).
+#
+#   docker compose up -d
+#   cd backend && go run ./cmd/server -db data/typeahead.db -cache-backend redis
+#   # default -redis-addrs is localhost:6379,localhost:6380,localhost:6381
+#   docker compose down
+services:
+  redis-0:
+    image: redis:7-alpine
+    command: ["redis-server", "--maxmemory", "128mb", "--maxmemory-policy", "allkeys-lru"]
+    ports: ["6379:6379"]
+  redis-1:
+    image: redis:7-alpine
+    command: ["redis-server", "--maxmemory", "128mb", "--maxmemory-policy", "allkeys-lru"]
+    ports: ["6380:6379"]
+  redis-2:
+    image: redis:7-alpine
+    command: ["redis-server", "--maxmemory", "128mb", "--maxmemory-policy", "allkeys-lru"]
+    ports: ["6381:6379"]
